@@ -30,7 +30,7 @@ class DefaultShellLayout extends ConsumerWidget {
         onTap: (index) {
           if (index != currentIndex) {
             ref.read(bottomNavIndexProvider.notifier).state = index;
-            context.go(_routes[index]);
+            context.push(_routes[index]);
           }
         },
         items: const [

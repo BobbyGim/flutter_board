@@ -19,11 +19,52 @@ final router = GoRouter(
         return DefaultShellLayout(child: child);
       },
       routes: [
-        GoRoute(path: '/', builder: (context, state) => HomeScreen()),
+        GoRoute(
+          path: '/',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              CustomTransitionPage(
+                child: const HomeScreen(),
+                transitionDuration: const Duration(milliseconds: 100),
+                transitionsBuilder:
+                    (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) => FadeTransition(opacity: animation, child: child),
+              ),
+        ),
 
-        GoRoute(path: '/board', builder: (context, state) => BoardScreen()),
+        GoRoute(
+          path: '/board',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              CustomTransitionPage(
+                child: const BoardScreen(),
+                transitionDuration: const Duration(milliseconds: 100),
+                transitionsBuilder:
+                    (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) => FadeTransition(opacity: animation, child: child),
+              ),
+        ),
 
-        GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+        GoRoute(
+          path: '/profile',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              CustomTransitionPage(
+                child: const ProfileScreen(),
+                transitionsBuilder:
+                    (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                    ) => FadeTransition(opacity: animation, child: child),
+              ),
+        ),
       ],
     ),
 

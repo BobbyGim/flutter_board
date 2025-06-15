@@ -21,40 +21,59 @@ final router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              CustomTransitionPage(
+          pageBuilder:
+              (
+                BuildContext context,
+                GoRouterState state,
+              ) => CustomTransitionPage(
                 child: const HomeScreen(),
-                transitionDuration: const Duration(milliseconds: 100),
+                transitionDuration: const Duration(
+                  milliseconds: 100,
+                ),
                 transitionsBuilder:
                     (
                       BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation,
                       Widget child,
-                    ) => FadeTransition(opacity: animation, child: child),
+                    ) => FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
               ),
         ),
 
         GoRoute(
           path: '/board',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              CustomTransitionPage(
+          pageBuilder:
+              (
+                BuildContext context,
+                GoRouterState state,
+              ) => CustomTransitionPage(
                 child: const BoardScreen(),
-                transitionDuration: const Duration(milliseconds: 100),
+                transitionDuration: const Duration(
+                  milliseconds: 100,
+                ),
                 transitionsBuilder:
                     (
                       BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation,
                       Widget child,
-                    ) => FadeTransition(opacity: animation, child: child),
+                    ) => FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
               ),
         ),
 
         GoRoute(
           path: '/profile',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              CustomTransitionPage(
+          pageBuilder:
+              (
+                BuildContext context,
+                GoRouterState state,
+              ) => CustomTransitionPage(
                 child: const ProfileScreen(),
                 transitionsBuilder:
                     (
@@ -62,7 +81,10 @@ final router = GoRouter(
                       Animation<double> animation,
                       Animation<double> secondaryAnimation,
                       Widget child,
-                    ) => FadeTransition(opacity: animation, child: child),
+                    ) => FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
               ),
         ),
       ],

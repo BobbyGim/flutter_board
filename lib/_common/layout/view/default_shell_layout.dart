@@ -22,7 +22,18 @@ class DefaultShellLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final location = GoRouter.of(context).location;
+    final indexFromLocation = getBottomNavIndexFromLocation(
+      location,
+    );
     final currentIndex = ref.watch(bottomNavIndexProvider);
+
+    if (currentIndex != indexFromLocation) {
+      Future.microtask(() {
+        ref.read(bottomNavIndexProvider.notifier).state =
+            indexFromLocation;
+      });
+    }
 
     return Scaffold(
       appBar: appBar,

@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
 
           ElevatedButton(
             onPressed: () {
-              context.push('/todo');
+              context.push('/weekly');
             },
             child: const Text('Todo 화면으로 이동'),
           ),

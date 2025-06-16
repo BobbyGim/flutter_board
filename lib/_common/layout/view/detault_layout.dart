@@ -16,7 +16,8 @@ class DetaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: isBackButtonEnabled ?? false,
+        automaticallyImplyLeading:
+            isBackButtonEnabled ?? false,
         centerTitle: false,
         backgroundColor: Colors.black,
         elevation: 10,

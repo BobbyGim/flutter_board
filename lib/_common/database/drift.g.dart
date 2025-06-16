@@ -42,6 +42,30 @@ class $TodoTableTable extends TodoTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<TodoType, String> type =
+      GeneratedColumn<String>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<TodoType>($TodoTableTable.$convertertype);
+  static const VerificationMeta _isCompletedMeta = const VerificationMeta(
+    'isCompleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+    'is_completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_completed" IN (0, 1))',
+    ),
+    clientDefault: () => false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -71,6 +95,8 @@ class $TodoTableTable extends TodoTable
     id,
     title,
     content,
+    type,
+    isCompleted,
     createdAt,
     updatedAt,
   ];
@@ -99,6 +125,15 @@ class $TodoTableTable extends TodoTable
       context.handle(
         _contentMeta,
         content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    }
+    if (data.containsKey('is_completed')) {
+      context.handle(
+        _isCompletedMeta,
+        isCompleted.isAcceptableOrUnknown(
+          data['is_completed']!,
+          _isCompletedMeta,
+        ),
       );
     }
     if (data.containsKey('created_at')) {
@@ -134,6 +169,16 @@ class $TodoTableTable extends TodoTable
         DriftSqlType.string,
         data['${effectivePrefix}content'],
       ),
+      type: $TodoTableTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      isCompleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_completed'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -149,18 +194,25 @@ class $TodoTableTable extends TodoTable
   $TodoTableTable createAlias(String alias) {
     return $TodoTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<TodoType, String, String> $convertertype =
+      const EnumNameConverter<TodoType>(TodoType.values);
 }
 
 class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   final int id;
   final String? title;
   final String? content;
+  final TodoType type;
+  final bool isCompleted;
   final DateTime createdAt;
   final DateTime updatedAt;
   const TodoTableData({
     required this.id,
     this.title,
     this.content,
+    required this.type,
+    required this.isCompleted,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -174,6 +226,12 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
     if (!nullToAbsent || content != null) {
       map['content'] = Variable<String>(content);
     }
+    {
+      map['type'] = Variable<String>(
+        $TodoTableTable.$convertertype.toSql(type),
+      );
+    }
+    map['is_completed'] = Variable<bool>(isCompleted);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -188,6 +246,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       content: content == null && nullToAbsent
           ? const Value.absent()
           : Value(content),
+      type: Value(type),
+      isCompleted: Value(isCompleted),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -202,6 +262,10 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String?>(json['title']),
       content: serializer.fromJson<String?>(json['content']),
+      type: $TodoTableTable.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
+      isCompleted: serializer.fromJson<bool>(json['isCompleted']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -213,6 +277,10 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String?>(title),
       'content': serializer.toJson<String?>(content),
+      'type': serializer.toJson<String>(
+        $TodoTableTable.$convertertype.toJson(type),
+      ),
+      'isCompleted': serializer.toJson<bool>(isCompleted),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -222,12 +290,16 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
     int? id,
     Value<String?> title = const Value.absent(),
     Value<String?> content = const Value.absent(),
+    TodoType? type,
+    bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => TodoTableData(
     id: id ?? this.id,
     title: title.present ? title.value : this.title,
     content: content.present ? content.value : this.content,
+    type: type ?? this.type,
+    isCompleted: isCompleted ?? this.isCompleted,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -236,6 +308,10 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
       content: data.content.present ? data.content.value : this.content,
+      type: data.type.present ? data.type.value : this.type,
+      isCompleted: data.isCompleted.present
+          ? data.isCompleted.value
+          : this.isCompleted,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -247,6 +323,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
+          ..write('type: $type, ')
+          ..write('isCompleted: $isCompleted, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -254,7 +332,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, title, content, createdAt, updatedAt);
+  int get hashCode =>
+      Object.hash(id, title, content, type, isCompleted, createdAt, updatedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -262,6 +341,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           other.id == this.id &&
           other.title == this.title &&
           other.content == this.content &&
+          other.type == this.type &&
+          other.isCompleted == this.isCompleted &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -270,12 +351,16 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
   final Value<int> id;
   final Value<String?> title;
   final Value<String?> content;
+  final Value<TodoType> type;
+  final Value<bool> isCompleted;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const TodoTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
+    this.type = const Value.absent(),
+    this.isCompleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -283,13 +368,17 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
+    required TodoType type,
+    this.isCompleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
-  });
+  }) : type = Value(type);
   static Insertable<TodoTableData> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? content,
+    Expression<String>? type,
+    Expression<bool>? isCompleted,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -297,6 +386,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
+      if (type != null) 'type': type,
+      if (isCompleted != null) 'is_completed': isCompleted,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -306,6 +397,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     Value<int>? id,
     Value<String?>? title,
     Value<String?>? content,
+    Value<TodoType>? type,
+    Value<bool>? isCompleted,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
   }) {
@@ -313,6 +406,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
+      type: type ?? this.type,
+      isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -330,6 +425,14 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
+    if (type.present) {
+      map['type'] = Variable<String>(
+        $TodoTableTable.$convertertype.toSql(type.value),
+      );
+    }
+    if (isCompleted.present) {
+      map['is_completed'] = Variable<bool>(isCompleted.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -345,6 +448,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
+          ..write('type: $type, ')
+          ..write('isCompleted: $isCompleted, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -368,6 +473,8 @@ typedef $$TodoTableTableCreateCompanionBuilder =
       Value<int> id,
       Value<String?> title,
       Value<String?> content,
+      required TodoType type,
+      Value<bool> isCompleted,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -376,6 +483,8 @@ typedef $$TodoTableTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String?> title,
       Value<String?> content,
+      Value<TodoType> type,
+      Value<bool> isCompleted,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -401,6 +510,17 @@ class $$TodoTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
     column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<TodoType, TodoType, String> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<bool> get isCompleted => $composableBuilder(
+    column: $table.isCompleted,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -439,6 +559,16 @@ class $$TodoTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCompleted => $composableBuilder(
+    column: $table.isCompleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -467,6 +597,14 @@ class $$TodoTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TodoType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCompleted => $composableBuilder(
+    column: $table.isCompleted,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -509,12 +647,16 @@ class $$TodoTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String?> title = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                Value<TodoType> type = const Value.absent(),
+                Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => TodoTableCompanion(
                 id: id,
                 title: title,
                 content: content,
+                type: type,
+                isCompleted: isCompleted,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),
@@ -523,12 +665,16 @@ class $$TodoTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String?> title = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                required TodoType type,
+                Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => TodoTableCompanion.insert(
                 id: id,
                 title: title,
                 content: content,
+                type: type,
+                isCompleted: isCompleted,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),

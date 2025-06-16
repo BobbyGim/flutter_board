@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_board/_common/layout/view/default_shell_layout.dart';
-import 'package:flutter_board/board/view/board_screen.dart';
+import 'package:flutter_board/_common/router/fade_transition_router.dart';
 import 'package:flutter_board/home/view/home_screen.dart';
-import 'package:flutter_board/login/view/login_screen.dart';
-import 'package:flutter_board/profile/view/profile_screen.dart';
+import 'package:flutter_board/monthly/view/monthly_page.dart';
+import 'package:flutter_board/weekly/view/weekly_page.dart';
 import 'package:go_router/go_router.dart';
 
 // navigator key 생성
@@ -22,82 +22,26 @@ final router = GoRouter(
         GoRoute(
           path: '/',
           pageBuilder:
-              (
-                BuildContext context,
-                GoRouterState state,
-              ) => CustomTransitionPage(
-                child: const HomeScreen(),
-                transitionDuration: const Duration(
-                  milliseconds: 100,
-                ),
-                transitionsBuilder:
-                    (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                      Widget child,
-                    ) => FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
-              ),
+              (BuildContext context, GoRouterState state) =>
+                  FadeTransitionRouter(child: HomeScreen()),
         ),
 
         GoRoute(
-          path: '/board',
+          path: '/weekly',
           pageBuilder:
-              (
-                BuildContext context,
-                GoRouterState state,
-              ) => CustomTransitionPage(
-                child: const BoardScreen(),
-                transitionDuration: const Duration(
-                  milliseconds: 100,
-                ),
-                transitionsBuilder:
-                    (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                      Widget child,
-                    ) => FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
-              ),
+              (BuildContext context, GoRouterState state) =>
+                  FadeTransitionRouter(child: WeeklyPage()),
         ),
 
         GoRoute(
-          path: '/profile',
+          path: '/monthly',
           pageBuilder:
-              (
-                BuildContext context,
-                GoRouterState state,
-              ) => CustomTransitionPage(
-                child: const ProfileScreen(),
-                transitionsBuilder:
-                    (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                      Widget child,
-                    ) => FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
-              ),
+              (BuildContext context, GoRouterState state) =>
+                  FadeTransitionRouter(
+                    child: MonthlyPage(),
+                  ),
         ),
       ],
-    ),
-
-    GoRoute(
-      path: '/login',
-      name: "login",
-      parentNavigatorKey: _rootNavigatorKey, // 중요한 부분
-      builder: (context, state) {
-        // final id = state.params['id']!;
-        return LoginScreen();
-      },
     ),
   ],
 );

@@ -42,6 +42,8 @@ dependencies:
   path_provider: ^2.1.5
   sqlite3_flutter_libs: ^0.5.34
   path: ^1.9.1
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +56,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   drift_dev: ^2.26.1
-  build_runner: ^2.4.15
+  build_runner: ^2.5.0
+  json_serializable: ^6.9.5
+  freezed: ^3.0.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

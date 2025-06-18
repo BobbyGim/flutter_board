@@ -21,10 +21,6 @@ void main() async {
         theme: ThemeData(
           fontFamily: 'Pretendard',
           useMaterial3: false,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.black,
-            error: Colors.red,
-          ),
         ),
       ),
     ),

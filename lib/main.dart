@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_board/_common/database/drift.dart';
 import 'package:flutter_board/_common/router/router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final database = AppDatabase();
+  await dotenv.load();
 
   runApp(
     ProviderScope(

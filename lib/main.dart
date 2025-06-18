@@ -10,8 +10,8 @@ void main() async {
   await dotenv.load();
 
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    url: dotenv.get('SUPABASE_URL'),
+    anonKey: dotenv.get("SUPABASE_ANON_KEY"),
   );
 
   runApp(
@@ -21,6 +21,10 @@ void main() async {
         theme: ThemeData(
           fontFamily: 'Pretendard',
           useMaterial3: false,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.black,
+            error: Colors.red,
+          ),
         ),
       ),
     ),

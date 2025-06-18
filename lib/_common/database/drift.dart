@@ -13,9 +13,10 @@ part 'drift.g.dart';
 @DriftDatabase(tables: [TodoTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
-
-  Future<List<TodoTableData>> geTodoList() =>
-      select(todoTable).get();
+  //
+  Future<List<TodoTableData>> getTodoList() {
+    return select(todoTable).get();
+  }
 
   Future<int> insertTodo(TodoTableCompanion todo) =>
       into(todoTable).insert(todo);

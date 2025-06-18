@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class DetaultLayout extends StatelessWidget {
   final Widget child;
+  final Widget? bottomNavigationBar;
   final String title;
   final bool? isBackButtonEnabled;
 
@@ -10,6 +11,7 @@ class DetaultLayout extends StatelessWidget {
     required this.child,
     required this.title,
     this.isBackButtonEnabled = false,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -19,19 +21,19 @@ class DetaultLayout extends StatelessWidget {
         automaticallyImplyLeading:
             isBackButtonEnabled ?? false,
         centerTitle: false,
-        backgroundColor: Colors.black,
-        elevation: 10,
-        shadowColor: Colors.black,
+        // backgroundColor: Colors.white,
+        elevation: 0,
         title: Text(
           title,
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 20,
+            fontSize: 18,
             color: Colors.white,
           ),
         ),
       ),
       body: child,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

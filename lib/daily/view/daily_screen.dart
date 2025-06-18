@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_board/_common/layout/view/detault_layout.dart';
 import 'package:flutter_board/_common/utils/size_utils.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class DailyScreen extends StatelessWidget {
+  const DailyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DetaultLayout(
-      title: '홈',
+      title: '오늘의 할 일',
 
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),

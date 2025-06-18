@@ -8,15 +8,14 @@ void main() async {
 
   final database = AppDatabase();
 
-  final res = await database.geTodoList();
-
-  print(res);
-
   runApp(
     ProviderScope(
       child: MaterialApp.router(
         routerConfig: router,
-        theme: ThemeData(fontFamily: 'Pretendard'),
+        theme: ThemeData(
+          fontFamily: 'Pretendard',
+          useMaterial3: false,
+        ),
       ),
     ),
   );

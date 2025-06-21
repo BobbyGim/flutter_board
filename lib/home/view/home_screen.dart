@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_board/_common/layout/view/detault_layout.dart';
 import 'package:flutter_board/_common/utils/size_utils.dart';
+import 'package:flutter_board/home/components/input.dart';
+import 'package:flutter_board/home/provider/todo_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todo = ref.watch(todoProvider);
+    final notifier = ref.read(todoProvider.notifier);
+
     return DetaultLayout(
       title: '홈',
 
@@ -106,6 +112,22 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          FieldEditor(
+            label: '제목',
+            value: todo?.title ?? '',
+            onChanged: (v) {
+              notifier.update(title: v);
+              print(todo?.title);
+            },
+          ),
+          FieldEditor(
+            label: '설명',
+            value: todo?.description ?? '',
+            onChanged: (v) {
+              notifier.update(description: v);
+              print(todo?.description);
+            },
+          ),
           Row(
             children: [
               SizedBox(

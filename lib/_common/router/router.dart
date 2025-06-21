@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_board/_common/layout/view/default_shell_layout.dart';
 import 'package:flutter_board/_common/router/fade_transition_router.dart';
-import 'package:flutter_board/daily/view/daily_screen.dart';
+import 'package:flutter_board/home/view/home_screen.dart';
 import 'package:flutter_board/monthly/view/monthly_page.dart';
 import 'package:flutter_board/weekly/view/weekly_page.dart';
 import 'package:go_router/go_router.dart';
@@ -23,9 +23,7 @@ final router = GoRouter(
           path: '/',
           pageBuilder:
               (BuildContext context, GoRouterState state) =>
-                  FadeTransitionRouter(
-                    child: DailyScreen(),
-                  ),
+                  FadeTransitionRouter(child: HomeScreen()),
         ),
 
         GoRoute(

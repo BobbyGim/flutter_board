@@ -7,6 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  print("Running in development mode");
+
   await dotenv.load(fileName: "asset/config/.env");
 
   await Supabase.initialize(
